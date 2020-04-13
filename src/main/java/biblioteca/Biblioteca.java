@@ -56,6 +56,32 @@ public class Biblioteca {
         printListOfBooks();
         printStream.println("Choose a book:");
 
+        Book book = getBook();
+
+        assert book != null;
+        if (!book.checked) {
+            book.checked = true;
+            printStream.println("Thank you! Enjoy the book.");
+        } else {
+            printStream.println("Sorry, that book is not available.");
+        }
+    }
+
+    public void returnBook(){
+        printStream.println("Which book would you like to return?");
+
+        Book book = getBook();
+
+        assert book != null;
+        if (book.checked) {
+            book.checked = false;
+            printStream.println("Thank you for returning a book.");
+        } else {
+            printStream.println("Sorry, that book is not available.");
+        }
+    }
+
+    private Book getBook(){
         String option;
         Book book;
 
@@ -64,21 +90,13 @@ public class Biblioteca {
             book = books[Integer.parseInt(option) - 1];
         } catch (IOException e) {
             e.printStackTrace();
-            return;
+            return null;
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             printStream.println("Sorry, that book is not available.");
-            return;
+            return null;
         }
 
-        if (!book.checked) {
-            book.checked = true;
-            printStream.println("Thank you! Enjoy the book.");
-        } else {
-            printStream.println("Sorry, that book is not available.");
-        }
-
-
+        return book;
     }
-
 
 }

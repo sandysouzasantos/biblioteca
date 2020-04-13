@@ -96,6 +96,18 @@ public class BibliotecaTest {
         verify(printStream, times(1)).println("Sorry, that book is not available.");
     }
 
+    @Test
+    public void shouldReturnABook() throws IOException {
+        books[1].checked = true;
+        when(bufferedReader.readLine()).thenReturn("2");
+
+        biblioteca.returnBook();
+
+        assertThat(books[1].checked, is(false));
+        verify(printStream, times(1)).println("Thank you for returning a book.");
+
+    }
+
 
 
 }
