@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class BibliotecaTest {
-    private String[] books;
+    private String[] books = {"Harry Potter", "The Pragmatic Programmer"};
     private PrintStream printStream;
     private Biblioteca biblioteca;
     private BufferedReader bufferedReader;
@@ -39,17 +39,24 @@ public class BibliotecaTest {
     @Test
     public void shouldShowMenuOption() throws IOException {
         when(bufferedReader.readLine()).thenReturn("1");
+
         String option = biblioteca.chooseMenuOption();
-        verify(printStream, times(1)).println("The chosen option was 1");
+
         assertThat(option, is("1"));
     }
 
     @Test
     public void shouldNotifyAnInvalidChoice() throws IOException {
         when(bufferedReader.readLine()).thenReturn("c");
+        biblioteca.chooseMenuOption();
 
         verify(printStream, times(1)).println("Invalid Option. Choose a valid one.");
     }
 
+    @Test
+    public void shouldDisplayAListOfBooks(){
+        biblioteca.displayListOfBooks();
+        verify(printStream, times(2)).println(anyString());
+    }
 
 }

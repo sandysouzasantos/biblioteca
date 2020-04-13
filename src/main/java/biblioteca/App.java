@@ -10,7 +10,7 @@ import java.io.PrintStream;
 public class App {
 
     public static void main(String[] args) {
-        String[] books = {""};
+        String[] books = {"Harry Potter", "The Pragmatic Programmer"};
         Biblioteca biblioteca = new Biblioteca(System.out, new BufferedReader(new InputStreamReader(System.in)), books);
         biblioteca.sayHello();
         biblioteca.chooseMenuOption();

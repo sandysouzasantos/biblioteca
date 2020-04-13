@@ -15,18 +15,18 @@ public class Biblioteca {
         this.books = books;
     }
 
-    public void sayHello(){
+    public void sayHello() {
         printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
     }
 
-    public String chooseMenuOption(){
+    public String chooseMenuOption() {
         printStream.println("Select an option:\n1. List of books\n");
         String option;
 
         try {
             option = bufferedReader.readLine();
-            if(option == "1"){
-                printStream.println("The chosen option was " + option);
+            if (option.equals("1")) {
+                displayListOfBooks();
             } else {
                 printStream.println("Invalid Option. Choose a valid one.");
                 return "";
@@ -39,11 +39,10 @@ public class Biblioteca {
         return option;
     }
 
-    public void displayListOfBooks(){
-        printStream.println(books);
+    public void displayListOfBooks() {
+        for (String book : books)
+            printStream.println(book);
     }
-
-
 
 
 }
