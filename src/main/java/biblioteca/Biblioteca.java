@@ -1,7 +1,5 @@
 package biblioteca;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -22,17 +20,29 @@ public class Biblioteca {
     }
 
     public String chooseMenuOption() {
-        printStream.println("Select an option:\n1. List of books\n");
+        printStream.println("Select an option:\n1. List of books\n2. Checkout a book\n3. Return a book\n4. Quit");
         String option;
 
         try {
             option = bufferedReader.readLine();
-            if (option.equals("1")) {
-                checkOutBook();
-            } else {
-                printStream.println("Invalid Option. Choose a valid one.");
-                return "";
+
+            switch (option) {
+                case "1":
+                    printListOfBooks();
+                    break;
+                case "2":
+                    checkOutBook();
+                    break;
+                case "3":
+                    returnBook();
+                    break;
+                case "4":
+                    return "";
+                default:
+                    printStream.println("Invalid Option. Choose a valid one.");
+                    return chooseMenuOption();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -74,7 +84,7 @@ public class Biblioteca {
         }
     }
 
-    public void returnBook(){
+    public void returnBook() {
         printStream.println("Which book would you like to return?");
 
         Book book;

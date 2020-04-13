@@ -9,8 +9,6 @@ import java.io.PrintStream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
-
 import static org.mockito.Mockito.*;
 
 public class BibliotecaTest {
@@ -48,7 +46,7 @@ public class BibliotecaTest {
 
     @Test
     public void shouldNotifyAnInvalidChoice() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("c");
+        when(bufferedReader.readLine()).thenReturn("c").thenReturn("1");
         biblioteca.chooseMenuOption();
 
         verify(printStream, times(1)).println("Invalid Option. Choose a valid one.");
