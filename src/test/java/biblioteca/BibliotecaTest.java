@@ -105,7 +105,15 @@ public class BibliotecaTest {
 
         assertThat(books[1].checked, is(false));
         verify(printStream, times(1)).println("Thank you for returning a book.");
+        books[1].checked = false;
+    }
 
+    @Test
+    public void shouldNotifyUserIfTheyTryToReturnAnInvalidBook() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("7");
+
+        biblioteca.returnBook();
+        verify(printStream, times(1)).println("That is not a valid book to return.");
     }
 
 

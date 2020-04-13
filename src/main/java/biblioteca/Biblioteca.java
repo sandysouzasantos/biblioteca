@@ -1,5 +1,7 @@
 package biblioteca;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -56,9 +58,14 @@ public class Biblioteca {
         printListOfBooks();
         printStream.println("Choose a book:");
 
-        Book book = getBook();
+        Book book;
+        try {
+            book = getBook();
+        } catch (InvalidBookException e) {
+            printStream.println("Sorry, that book is not available.");
+            return;
+        }
 
-        assert book != null;
         if (!book.checked) {
             book.checked = true;
             printStream.println("Thank you! Enjoy the book.");
@@ -70,18 +77,23 @@ public class Biblioteca {
     public void returnBook(){
         printStream.println("Which book would you like to return?");
 
-        Book book = getBook();
+        Book book;
+        try {
+            book = getBook();
+        } catch (InvalidBookException e) {
+            printStream.println("That is not a valid book to return.");
+            return;
+        }
 
-        assert book != null;
         if (book.checked) {
             book.checked = false;
             printStream.println("Thank you for returning a book.");
         } else {
-            printStream.println("Sorry, that book is not available.");
+            printStream.println("That is not a valid book to return.");
         }
     }
 
-    private Book getBook(){
+    private Book getBook() throws InvalidBookException {
         String option;
         Book book;
 
@@ -90,10 +102,9 @@ public class Biblioteca {
             book = books[Integer.parseInt(option) - 1];
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new InvalidBookException();
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            printStream.println("Sorry, that book is not available.");
-            return null;
+            throw new InvalidBookException();
         }
 
         return book;
