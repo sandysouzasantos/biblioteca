@@ -44,5 +44,12 @@ public class BibliotecaTest {
         assertThat(option, is("1"));
     }
 
+    @Test
+    public void shouldNotifyAnInvalidChoice() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("c");
+
+        verify(printStream, times(1)).println("Invalid Option. Choose a valid one.");
+    }
+
 
 }

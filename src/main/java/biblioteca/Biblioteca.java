@@ -25,7 +25,12 @@ public class Biblioteca {
 
         try {
             option = bufferedReader.readLine();
-            printStream.println("The chosen option was " + option);
+            if(option == "1"){
+                printStream.println("The chosen option was " + option);
+            } else {
+                printStream.println("Invalid Option. Choose a valid one.");
+                return "";
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -33,6 +38,12 @@ public class Biblioteca {
 
         return option;
     }
+
+    public void displayListOfBooks(){
+        printStream.println(books);
+    }
+
+
 
 
 }
