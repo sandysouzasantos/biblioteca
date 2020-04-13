@@ -4,11 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -59,9 +56,36 @@ public class BibliotecaTest {
 
     @Test
     public void shouldDisplayAListOfBooks(){
-        biblioteca.displayListOfBooks();
+        biblioteca.printListOfBooks();
         verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString());
-        verify(printStream, times(3)).printf(anyString(), anyString(), anyString(), anyInt());
+        verify(printStream, times(3)).printf(anyString(),anyInt(), anyString(), anyString(), anyInt());
     }
+
+    @Test
+    public void shouldCheckOutABook() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("2");
+
+        biblioteca.checkOutBook();
+
+        assertThat(books[1].checked, is(true));
+        verify(printStream, times(1)).println("Thank you! Enjoy the book.");
+
+        books[1].checked = false;
+    }
+
+    @Test
+    public void shouldNotPrintACheckedOutBook() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("2");
+        biblioteca.checkOutBook();
+
+        assertThat(books[1].checked, is(true));
+
+        biblioteca.printListOfBooks();
+
+        verify(printStream, times(2)).printf(anyString(), anyString(), anyString(), anyString());
+        verify(printStream, times(5)).printf(anyString(),anyInt(), anyString(), anyString(), anyInt());
+    }
+
+
 
 }

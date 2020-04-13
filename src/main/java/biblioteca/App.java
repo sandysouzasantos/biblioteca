@@ -5,7 +5,6 @@ package biblioteca;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 
 public class App {
 
@@ -16,7 +15,6 @@ public class App {
                 new Book("An American Marriage", "Tayari Jones", 2018)
         };
         Biblioteca biblioteca = new Biblioteca(System.out, new BufferedReader(new InputStreamReader(System.in)), books);
-        biblioteca.displayListOfBooks();
-//        biblioteca.chooseMenuOption();
+        biblioteca.chooseMenuOption();
     }
 }

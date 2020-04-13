@@ -26,7 +26,7 @@ public class Biblioteca {
         try {
             option = bufferedReader.readLine();
             if (option.equals("1")) {
-                displayListOfBooks();
+                checkOutBook();
             } else {
                 printStream.println("Invalid Option. Choose a valid one.");
                 return "";
@@ -39,12 +39,37 @@ public class Biblioteca {
         return option;
     }
 
-    public void displayListOfBooks() {
-        printStream.printf("%-32s%-16s%8s%n", "Title:", "Author:", "Year:");
+    public void printListOfBooks() {
+        printStream.printf("%-35s%-16s%8s%n", "Title:", "Author:", "Year:");
 
+        int index = 1;
         for (Book book : books) {
-            printStream.printf("%-32s%-16s%8s%n", book.title, book.author, book.year);
+            if (!book.checked) {
+                printStream.printf("%-3s%-32s%-16s%8s%n", index, book.title, book.author, book.year);
+            }
+            index++;
         }
+
+    }
+
+    public void checkOutBook() {
+        printListOfBooks();
+        printStream.println("Choose a book:");
+
+        String option;
+        Book book;
+
+        try {
+            option = bufferedReader.readLine();
+            book = books[Integer.parseInt(option) - 1];
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        book.checked = true;
+        printStream.println("Thank you! Enjoy the book.");
+
     }
 
 
