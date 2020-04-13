@@ -3,12 +3,16 @@
  */
 package biblioteca;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        String[] books = {""};
+        Biblioteca biblioteca = new Biblioteca(System.out, new BufferedReader(new InputStreamReader(System.in)), books);
+        biblioteca.sayHello();
+        biblioteca.chooseMenuOption();
     }
 }

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,4 +35,14 @@ public class BibliotecaTest {
 
         verify(printStream, times(1)).println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
     }
+
+    @Test
+    public void shouldShowMenuOption() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("1");
+        String option = biblioteca.chooseMenuOption();
+        verify(printStream, times(1)).println("The chosen option was 1");
+        assertThat(option, is("1"));
+    }
+
+
 }
