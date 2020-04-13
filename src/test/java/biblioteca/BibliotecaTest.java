@@ -17,7 +17,11 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class BibliotecaTest {
-    private String[] books = {"Harry Potter", "The Pragmatic Programmer"};
+    private Book[] books = {
+            new Book("Harry Potter, vol. 1", "J. K. Rowling", 2007),
+            new Book("Becoming", "Michelle Obama", 2019),
+            new Book("An American Marriage", "Tayari Jones", 2018)
+    };
     private PrintStream printStream;
     private Biblioteca biblioteca;
     private BufferedReader bufferedReader;
@@ -56,7 +60,8 @@ public class BibliotecaTest {
     @Test
     public void shouldDisplayAListOfBooks(){
         biblioteca.displayListOfBooks();
-        verify(printStream, times(2)).println(anyString());
+        verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString());
+        verify(printStream, times(3)).printf(anyString(), anyString(), anyString(), anyInt());
     }
 
 }

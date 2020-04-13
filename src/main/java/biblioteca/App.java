@@ -10,9 +10,13 @@ import java.io.PrintStream;
 public class App {
 
     public static void main(String[] args) {
-        String[] books = {"Harry Potter", "The Pragmatic Programmer"};
+        Book[] books = {
+                new Book("Harry Potter, vol. 1", "J. K. Rowling", 2007),
+                new Book("Becoming", "Michelle Obama", 2019),
+                new Book("An American Marriage", "Tayari Jones", 2018)
+        };
         Biblioteca biblioteca = new Biblioteca(System.out, new BufferedReader(new InputStreamReader(System.in)), books);
-        biblioteca.sayHello();
-        biblioteca.chooseMenuOption();
+        biblioteca.displayListOfBooks();
+//        biblioteca.chooseMenuOption();
     }
 }

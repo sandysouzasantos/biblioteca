@@ -7,9 +7,9 @@ import java.io.PrintStream;
 public class Biblioteca {
     private PrintStream printStream;
     private BufferedReader bufferedReader;
-    private String[] books;
+    private Book[] books;
 
-    public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, String[] books) {
+    public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, Book[] books) {
         this.printStream = printStream;
         this.bufferedReader = bufferedReader;
         this.books = books;
@@ -40,8 +40,11 @@ public class Biblioteca {
     }
 
     public void displayListOfBooks() {
-        for (String book : books)
-            printStream.println(book);
+        printStream.printf("%-32s%-16s%8s%n", "Title:", "Author:", "Year:");
+
+        for (Book book : books) {
+            printStream.printf("%-32s%-16s%8s%n", book.title, book.author, book.year);
+        }
     }
 
 
