@@ -65,10 +65,18 @@ public class Biblioteca {
         } catch (IOException e) {
             e.printStackTrace();
             return;
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            printStream.println("Sorry, that book is not available.");
+            return;
         }
 
-        book.checked = true;
-        printStream.println("Thank you! Enjoy the book.");
+        if (!book.checked) {
+            book.checked = true;
+            printStream.println("Thank you! Enjoy the book.");
+        } else {
+            printStream.println("Sorry, that book is not available.");
+        }
+
 
     }
 

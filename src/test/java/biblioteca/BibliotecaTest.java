@@ -86,6 +86,16 @@ public class BibliotecaTest {
         verify(printStream, times(5)).printf(anyString(),anyInt(), anyString(), anyString(), anyInt());
     }
 
+    @Test
+    public void shouldNotifyUserIfTheyTryToCheckOutAnUnavailableBook() throws IOException {
+        books[1].checked = true;
+
+        when(bufferedReader.readLine()).thenReturn("6");
+
+        biblioteca.checkOutBook();
+        verify(printStream, times(1)).println("Sorry, that book is not available.");
+    }
+
 
 
 }
