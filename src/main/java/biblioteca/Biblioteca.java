@@ -9,6 +9,11 @@ public class Biblioteca {
     private BufferedReader bufferedReader;
     private Book[] books;
     private Movie[] movies;
+    public User[] users = {
+            new User("111-1111", "123456", "Maria Santos", "maria@santos.com", "98888-8888", "librarian"),
+            new User("2222-1111", "123456", "Jose Santos", "jose@santos.com", "98888-8887", "customer"),
+    };
+    public User loggedUser;
 
     public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, Book[] books, Movie[] movies) {
         this.printStream = printStream;
@@ -39,6 +44,9 @@ public class Biblioteca {
                     returnBook();
                     break;
                 case "4":
+                    doLogin();
+                    break;
+                case "5":
                     return "";
                 default:
                     printStream.println("Invalid Option. Choose a valid one.");
@@ -129,7 +137,7 @@ public class Biblioteca {
         int index = 1;
         for (Movie movie : movies) {
 //            if (!movie.checked) {
-                printStream.printf("%-3s%-32s%-16s%-8s%8s%n", index, movie.name, movie.director, movie.year, movie.rating);
+            printStream.printf("%-3s%-32s%-16s%-8s%8s%n", index, movie.name, movie.director, movie.year, movie.rating);
 //            }
             index++;
         }
@@ -171,5 +179,47 @@ public class Biblioteca {
 
         return movie;
     }
+
+    public void doLogin() throws IOException {
+        printStream.println("Library Number: ");
+        String libraryNumber = bufferedReader.readLine();
+
+        printStream.println("Password: ");
+        String password = bufferedReader.readLine();
+
+        for (User user : users) {
+            if (user.libraryNumber == libraryNumber) {
+                if (user.password == password) {
+                    user.loginUser();
+                    loggedUser = user;
+                }
+            }
+        }
+    }
+
+    public void showUnavailableBooks(){
+        if(loggedUser.role == "librarian") {
+            printStream.printf("%-35s%-16s%8s%n", "Title:", "Author:", "Year:");
+
+            int index = 1;
+            for (Book book : books) {
+                if (book.checked) {
+                    printStream.printf("%-3s%-32s%-16s%8s%n", index, book.title, book.author, book.year);
+                }
+                index++;
+            }
+        }
+    }
+
+    public void showUserInformation(){
+        if(loggedUser.logged){
+            printStream.println(loggedUser.toString());
+        }
+    }
+
+
+
+
+
 
 }
