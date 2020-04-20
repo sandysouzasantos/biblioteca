@@ -11,4 +11,12 @@ public class Book {
         this.author = author;
         this.year = year;
     }
+
+    public void setChecked() {
+        this.checked = true;
+    }
+
+    public void setUnchecked() {
+        this.checked = false;
+    }
 }

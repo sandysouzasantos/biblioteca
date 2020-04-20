@@ -20,7 +20,7 @@ public class Biblioteca {
     }
 
     public String chooseMenuOption() {
-        printStream.println("Select an option:\n1. List of books\n2. Checkout a book\n3. Return a book\n4. Quit");
+        printStream.println("\nSelect an option:\n1. List of books\n2. Checkout a book\n3. Return a book\n4. Quit");
         String option;
 
         try {
@@ -66,7 +66,7 @@ public class Biblioteca {
 
     public void checkOutBook() {
         printListOfBooks();
-        printStream.println("Choose a book:");
+        printStream.println("Choose a book (1, 2, ...):");
 
         Book book;
         try {
@@ -77,12 +77,13 @@ public class Biblioteca {
         }
 
         if (!book.checked) {
-            book.checked = true;
+            book.setChecked();
             printStream.println("Thank you! Enjoy the book.");
         } else {
             printStream.println("Sorry, that book is not available.");
         }
     }
+
 
     public void returnBook() {
         printStream.println("Which book would you like to return?");
@@ -96,7 +97,7 @@ public class Biblioteca {
         }
 
         if (book.checked) {
-            book.checked = false;
+            book.setUnchecked();
             printStream.println("Thank you for returning a book.");
         } else {
             printStream.println("That is not a valid book to return.");
