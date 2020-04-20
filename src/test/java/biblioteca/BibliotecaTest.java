@@ -68,7 +68,7 @@ public class BibliotecaTest {
     public void shouldCheckOutABook() throws IOException {
         when(bufferedReader.readLine()).thenReturn("2");
 
-        biblioteca.checkOutBook();
+        biblioteca.checkoutBook();
 
         assertThat(books[1].checked, is(true));
         verify(printStream, times(1)).println("Thank you! Enjoy the book.");
@@ -79,7 +79,7 @@ public class BibliotecaTest {
     @Test
     public void shouldNotPrintACheckedOutBook() throws IOException {
         when(bufferedReader.readLine()).thenReturn("2");
-        biblioteca.checkOutBook();
+        biblioteca.checkoutBook();
 
         assertThat(books[1].checked, is(true));
 
@@ -95,7 +95,7 @@ public class BibliotecaTest {
 
         when(bufferedReader.readLine()).thenReturn("6");
 
-        biblioteca.checkOutBook();
+        biblioteca.checkoutBook();
         verify(printStream, times(1)).println("Sorry, that book is not available.");
     }
 
@@ -124,6 +124,18 @@ public class BibliotecaTest {
         biblioteca.printListOfMovies();
         verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString(), anyString());
         verify(printStream, times(3)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt(), anyDouble());
+    }
+
+    @Test
+    public void shouldCheckoutAMovie() throws IOException, InvalidMovieException {
+        when(bufferedReader.readLine()).thenReturn("2");
+
+        biblioteca.checkoutMovie();
+
+        assertThat(movies[1].checked, is(true));
+        verify(printStream, times(1)).println("Thank you! Enjoy the movie.");
+
+        movies[1].checked = false;
     }
 
 

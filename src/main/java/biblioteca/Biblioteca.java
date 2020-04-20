@@ -33,7 +33,7 @@ public class Biblioteca {
                     printListOfBooks();
                     break;
                 case "2":
-                    checkOutBook();
+                    checkoutBook();
                     break;
                 case "3":
                     returnBook();
@@ -66,7 +66,7 @@ public class Biblioteca {
 
     }
 
-    public void checkOutBook() {
+    public void checkoutBook() {
         printListOfBooks();
         printStream.println("Choose a book (1, 2, ...):");
 
@@ -133,6 +133,43 @@ public class Biblioteca {
 //            }
             index++;
         }
+    }
+
+    public void checkoutMovie() throws InvalidMovieException {
+        printListOfMovies();
+        printStream.println("Choose a movie (1, 2, ...):");
+
+        Movie movie;
+        try {
+            movie = getMovie();
+        } catch (InvalidMovieException e) {
+            printStream.println("Sorry, that movie is not available.");
+            return;
+        }
+
+        if (!movie.checked) {
+            movie.setChecked();
+            printStream.println("Thank you! Enjoy the movie.");
+        } else {
+            printStream.println("Sorry, that movie is not available.");
+        }
+    }
+
+    private Movie getMovie() throws InvalidMovieException {
+        String option;
+        Movie movie;
+
+        try {
+            option = bufferedReader.readLine();
+            movie = movies[Integer.parseInt(option) - 1];
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new InvalidMovieException();
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            throw new InvalidMovieException();
+        }
+
+        return movie;
     }
 
 }
