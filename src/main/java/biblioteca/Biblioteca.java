@@ -8,11 +8,13 @@ public class Biblioteca {
     private PrintStream printStream;
     private BufferedReader bufferedReader;
     private Book[] books;
+    private Movie[] movies;
 
-    public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, Book[] books) {
+    public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, Book[] books, Movie[] movies) {
         this.printStream = printStream;
         this.bufferedReader = bufferedReader;
         this.books = books;
+        this.movies = movies;
     }
 
     public void sayHello() {
@@ -119,6 +121,18 @@ public class Biblioteca {
         }
 
         return book;
+    }
+
+    public void printListOfMovies() {
+        printStream.printf("%-35s%-16s%-8s%8s%n", "Name:", "Director:", "Year:", "Rating");
+
+        int index = 1;
+        for (Movie movie : movies) {
+//            if (!movie.checked) {
+                printStream.printf("%-3s%-32s%-16s%-8s%8s%n", index, movie.name, movie.director, movie.year, movie.rating);
+//            }
+            index++;
+        }
     }
 
 }

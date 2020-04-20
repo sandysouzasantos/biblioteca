@@ -17,6 +17,11 @@ public class BibliotecaTest {
             new Book("Becoming", "Michelle Obama", 2019),
             new Book("An American Marriage", "Tayari Jones", 2018)
     };
+    Movie[] movies = {
+            new Movie("Parasite", "Bong Joon Ho", 2019, 8.6),
+            new Movie("Little Women", "Greta Gerwig", 2019, 7.9),
+            new Movie("Rocket Man", "Dexter Fletcher", 2019, 7.3)
+    };
     private PrintStream printStream;
     private Biblioteca biblioteca;
     private BufferedReader bufferedReader;
@@ -25,7 +30,7 @@ public class BibliotecaTest {
     public void setUp() throws Exception {
         printStream = mock(PrintStream.class);
         bufferedReader = mock(BufferedReader.class);
-        biblioteca = new Biblioteca(printStream, bufferedReader, books);
+        biblioteca = new Biblioteca(printStream, bufferedReader, books, movies);
     }
 
     @Test
@@ -53,10 +58,10 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void shouldDisplayAListOfBooks(){
+    public void shouldDisplayAListOfBooks() {
         biblioteca.printListOfBooks();
         verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString());
-        verify(printStream, times(3)).printf(anyString(),anyInt(), anyString(), anyString(), anyInt());
+        verify(printStream, times(3)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt());
     }
 
     @Test
@@ -81,7 +86,7 @@ public class BibliotecaTest {
         biblioteca.printListOfBooks();
 
         verify(printStream, times(2)).printf(anyString(), anyString(), anyString(), anyString());
-        verify(printStream, times(5)).printf(anyString(),anyInt(), anyString(), anyString(), anyInt());
+        verify(printStream, times(5)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt());
     }
 
     @Test
@@ -114,6 +119,12 @@ public class BibliotecaTest {
         verify(printStream, times(1)).println("That is not a valid book to return.");
     }
 
+    @Test
+    public void shouldDisplayAListOfMovies() {
+        biblioteca.printListOfMovies();
+        verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString(), anyString());
+        verify(printStream, times(3)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt(), anyDouble());
+    }
 
 
 }
