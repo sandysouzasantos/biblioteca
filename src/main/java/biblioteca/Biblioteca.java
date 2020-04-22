@@ -9,17 +9,18 @@ public class Biblioteca {
     private BufferedReader bufferedReader;
     private Book[] books;
     private Movie[] movies;
-    public User[] users = {
-            new User("111-1111", "123456", "Maria Santos", "maria@santos.com", "98888-8888", "librarian"),
-            new User("2222-1111", "123456", "Jose Santos", "jose@santos.com", "98888-8887", "customer"),
-    };
-    public User loggedUser;
+    private User[] users;
+    private User loggedUser;
 
     public Biblioteca(PrintStream printStream, BufferedReader bufferedReader, Book[] books, Movie[] movies) {
         this.printStream = printStream;
         this.bufferedReader = bufferedReader;
         this.books = books;
         this.movies = movies;
+    }
+
+    public void setUsers(User[] users) {
+        this.users = users;
     }
 
     public void sayHello() {
@@ -44,7 +45,12 @@ public class Biblioteca {
                     returnBook();
                     break;
                 case "4":
-                    doLogin();
+                    try {
+                        login();
+                    } catch (InvalidUserException e) {
+                        printStream.println("Invalid Library Number or password");
+                        return chooseMenuOption();
+                    }
                     break;
                 case "5":
                     return "";
@@ -87,7 +93,7 @@ public class Biblioteca {
         }
 
         if (!book.checked) {
-            book.setChecked();
+            book.checkout(loggedUser);
             printStream.println("Thank you! Enjoy the book.");
         } else {
             printStream.println("Sorry, that book is not available.");
@@ -180,7 +186,7 @@ public class Biblioteca {
         return movie;
     }
 
-    public void doLogin() throws IOException {
+    public void login() throws IOException, InvalidUserException {
         printStream.println("Library Number: ");
         String libraryNumber = bufferedReader.readLine();
 
@@ -188,38 +194,40 @@ public class Biblioteca {
         String password = bufferedReader.readLine();
 
         for (User user : users) {
-            if (user.libraryNumber == libraryNumber) {
-                if (user.password == password) {
+            if (user.getLibraryNumber() == libraryNumber) {
+                if (user.getPassword() == password) {
                     user.loginUser();
                     loggedUser = user;
+                    break;
                 }
             }
         }
+
+        if (loggedUser == null) {
+            throw new InvalidUserException();
+        }
     }
 
-    public void showUnavailableBooks(){
-        if(loggedUser.role == "librarian") {
-            printStream.printf("%-35s%-16s%8s%n", "Title:", "Author:", "Year:");
+    public void showUnavailableBooks() {
+        if (loggedUser != null && loggedUser.getRole() == "librarian") {
 
             int index = 1;
             for (Book book : books) {
                 if (book.checked) {
-                    printStream.printf("%-3s%-32s%-16s%8s%n", index, book.title, book.author, book.year);
+                    printStream.printf("%-3s%-32s%-16s%n", index, book.title, book.getRenter().getName());
                 }
                 index++;
             }
         }
     }
 
-    public void showUserInformation(){
-        if(loggedUser.logged){
-            printStream.println(loggedUser.toString());
+    public void showUserInformation() {
+        if (loggedUser != null) {
+            printStream.println("Name: " + loggedUser.getName());
+            printStream.println("Email: " + loggedUser.getEmail());
+            printStream.println("Phone: " + loggedUser.getPhone());
         }
     }
-
-
-
-
 
 
 }

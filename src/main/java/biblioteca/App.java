@@ -18,8 +18,16 @@ public class App {
                 new Movie("Rocket Man", "Dexter Fletcher", 2019, 7.3)
         };
 
+        User[] users = {
+                new User("111-1111", "123456", "Maria Santos", "maria@santos.com", "98888-8888", "librarian"),
+                new User("2222-1111", "123456", "Jose Santos", "jose@santos.com", "98888-8887", "customer"),
+        };
+
         Biblioteca biblioteca = new Biblioteca(System.out, new BufferedReader(new InputStreamReader(System.in)), books, movies);
+        biblioteca.setUsers(users);
         biblioteca.sayHello();
-        while (biblioteca.chooseMenuOption() != "") {};
+        while (biblioteca.chooseMenuOption() != "") {
+        }
+        ;
     }
 }

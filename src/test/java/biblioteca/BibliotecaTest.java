@@ -22,6 +22,10 @@ public class BibliotecaTest {
             new Movie("Little Women", "Greta Gerwig", 2019, 7.9),
             new Movie("Rocket Man", "Dexter Fletcher", 2019, 7.3)
     };
+    User[] users = {
+            new User("111-1111", "123456", "Maria Santos", "maria@santos.com", "98888-8888", "librarian"),
+            new User("2222-1111", "123456", "Jose Santos", "jose@santos.com", "98888-8887", "customer"),
+    };
     private PrintStream printStream;
     private Biblioteca biblioteca;
     private BufferedReader bufferedReader;
@@ -31,6 +35,7 @@ public class BibliotecaTest {
         printStream = mock(PrintStream.class);
         bufferedReader = mock(BufferedReader.class);
         biblioteca = new Biblioteca(printStream, bufferedReader, books, movies);
+        biblioteca.setUsers(users);
     }
 
     @Test
@@ -138,7 +143,44 @@ public class BibliotecaTest {
         movies[1].checked = false;
     }
 
+    @Test
+    public void shouldLogin() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
 
+        biblioteca.login();
+
+        assertThat(users[0].isLogged(), is(true));
+    }
+
+    @Test(expected = InvalidUserException.class)
+    public void shouldNotLogin() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1161").thenReturn("123456");
+        biblioteca.login();
+    }
+
+    @Test
+    public void shouldShowUnavailableBooks() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+
+        biblioteca.login();
+
+        books[0].checkout(users[0]);
+
+        biblioteca.showUnavailableBooks();
+
+        verify(printStream, times(1)).printf(anyString(), anyInt(), anyString(), anyString());
+    }
+
+    @Test
+    public void shouldPrintUserInformation() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+
+        biblioteca.login();
+
+        biblioteca.showUserInformation();
+
+        verify(printStream, times(1)).println("Name: " + users[0].getName());
+    }
 
 
 }
