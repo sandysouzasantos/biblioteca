@@ -28,23 +28,27 @@ public class Biblioteca {
     }
 
     public String chooseMenuOption() {
-        printStream.println("\nSelect an option:\n1. List of books\n2. Checkout a book\n3. Return a book\n4. Quit");
+        printStream.println("\nSelect an option:");
+        printStream.println("0. Log in");
+        printStream.println("1. List of books");
+        printStream.println("2. List of movies");
+        if (loggedUser != null) {
+            printStream.println("3. Checkout a book");
+            printStream.println("4. Return a book");
+            printStream.println("5. Checkout a movie");
+            printStream.println("6. Return a movie");
+            if (loggedUser.getRole().equals("librarian")) {
+                printStream.println("7. Show list of checked out books");
+            }
+        }
+        printStream.println("Q. Return a movie");
         String option;
 
         try {
             option = bufferedReader.readLine();
 
             switch (option) {
-                case "1":
-                    printListOfBooks();
-                    break;
-                case "2":
-                    checkoutBook();
-                    break;
-                case "3":
-                    returnBook();
-                    break;
-                case "4":
+                case "0":
                     try {
                         login();
                     } catch (InvalidUserException e) {
@@ -52,14 +56,41 @@ public class Biblioteca {
                         return chooseMenuOption();
                     }
                     break;
+                case "1":
+                    printListOfBooks();
+                    break;
+                case "2":
+                    printListOfMovies();
+                    break;
+                case "3":
+                    if (loggedUser != null)
+                        checkoutBook();
+                    break;
+                case "4":
+                    if (loggedUser != null)
+                        returnBook();
+                    break;
                 case "5":
+                    if (loggedUser != null)
+                        checkoutMovie();
+                    break;
+                case "6":
+                    if (loggedUser != null)
+                        returnMovie();
+                    break;
+                case "7":
+                    if (loggedUser != null && loggedUser.getRole().equals("librarian"))
+                        showUnavailableBooks();
+                    break;
+                case "Q":
+                case "q":
                     return "";
                 default:
                     printStream.println("Invalid Option. Choose a valid one.");
                     return chooseMenuOption();
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InvalidMovieException e) {
             e.printStackTrace();
             return "";
         }
@@ -72,8 +103,8 @@ public class Biblioteca {
 
         int index = 1;
         for (Book book : books) {
-            if (!book.checked) {
-                printStream.printf("%-3s%-32s%-16s%8s%n", index, book.title, book.author, book.year);
+            if (!book.getChecked()) {
+                printStream.printf("%-3s%-32s%-16s%8s%n", index, book.getTitle(), book.getAuthor(), book.getYear());
             }
             index++;
         }
@@ -92,7 +123,7 @@ public class Biblioteca {
             return;
         }
 
-        if (!book.checked) {
+        if (!book.getChecked()) {
             book.checkout(loggedUser);
             printStream.println("Thank you! Enjoy the book.");
         } else {
@@ -112,7 +143,7 @@ public class Biblioteca {
             return;
         }
 
-        if (book.checked) {
+        if (book.getChecked()) {
             book.setUnchecked();
             printStream.println("Thank you for returning a book.");
         } else {
@@ -142,9 +173,9 @@ public class Biblioteca {
 
         int index = 1;
         for (Movie movie : movies) {
-//            if (!movie.checked) {
-            printStream.printf("%-3s%-32s%-16s%-8s%8s%n", index, movie.name, movie.director, movie.year, movie.rating);
-//            }
+            if (!movie.getChecked()) {
+                printStream.printf("%-3s%-32s%-16s%-8s%8s%n", index, movie.getName(), movie.getDirector(), movie.getYear(), movie.getRating());
+            }
             index++;
         }
     }
@@ -161,8 +192,8 @@ public class Biblioteca {
             return;
         }
 
-        if (!movie.checked) {
-            movie.setChecked();
+        if (!movie.getChecked()) {
+            movie.checkout(loggedUser);
             printStream.println("Thank you! Enjoy the movie.");
         } else {
             printStream.println("Sorry, that movie is not available.");
@@ -194,8 +225,8 @@ public class Biblioteca {
         String password = bufferedReader.readLine();
 
         for (User user : users) {
-            if (user.getLibraryNumber() == libraryNumber) {
-                if (user.getPassword() == password) {
+            if (user.getLibraryNumber().equals(libraryNumber)) {
+                if (user.getPassword().equals(password)) {
                     user.loginUser();
                     loggedUser = user;
                     break;
@@ -213,8 +244,8 @@ public class Biblioteca {
 
             int index = 1;
             for (Book book : books) {
-                if (book.checked) {
-                    printStream.printf("%-3s%-32s%-16s%n", index, book.title, book.getRenter().getName());
+                if (book.getChecked()) {
+                    printStream.printf("%-3s%-32s%-16s%n", index, book.getTitle(), book.getRenter().getName());
                 }
                 index++;
             }
@@ -229,5 +260,23 @@ public class Biblioteca {
         }
     }
 
+    public void returnMovie() {
+        printStream.println("Which movie would you like to return?");
+
+        Movie movie;
+        try {
+            movie = getMovie();
+        } catch (InvalidMovieException e) {
+            printStream.println("That is not a valid movie to return.");
+            return;
+        }
+
+        if (movie.getChecked()) {
+            movie.setUnchecked();
+            printStream.println("Thank you for returning a movie.");
+        } else {
+            printStream.println("That is not a valid movie to return.");
+        }
+    }
 
 }

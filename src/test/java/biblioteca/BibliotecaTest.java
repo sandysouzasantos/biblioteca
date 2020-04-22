@@ -70,33 +70,33 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void shouldCheckOutABook() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("2");
+    public void shouldCheckOutABook() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
 
+        when(bufferedReader.readLine()).thenReturn("2");
         biblioteca.checkoutBook();
 
-        assertThat(books[1].checked, is(true));
+        assertThat(books[1].getChecked(), is(true));
         verify(printStream, times(1)).println("Thank you! Enjoy the book.");
 
-        books[1].checked = false;
+        books[1].setUnchecked();
     }
 
     @Test
     public void shouldNotPrintACheckedOutBook() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("2");
-        biblioteca.checkoutBook();
-
-        assertThat(books[1].checked, is(true));
+        books[0].checkout(users[0]);
 
         biblioteca.printListOfBooks();
 
-        verify(printStream, times(2)).printf(anyString(), anyString(), anyString(), anyString());
-        verify(printStream, times(5)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(printStream, times(1)).printf(anyString(), anyString(), anyString(), anyString());
+        verify(printStream, times(2)).printf(anyString(), anyInt(), anyString(), anyString(), anyInt());
     }
 
     @Test
-    public void shouldNotifyUserIfTheyTryToCheckOutAnUnavailableBook() throws IOException {
-        books[1].checked = true;
+    public void shouldNotifyUserIfTheyTryToCheckOutAnUnavailableBook() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
 
         when(bufferedReader.readLine()).thenReturn("6");
 
@@ -105,19 +105,24 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void shouldReturnABook() throws IOException {
-        books[1].checked = true;
-        when(bufferedReader.readLine()).thenReturn("2");
+    public void shouldReturnABook() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
 
+        books[1].checkout(users[0]);
+
+        when(bufferedReader.readLine()).thenReturn("2");
         biblioteca.returnBook();
 
-        assertThat(books[1].checked, is(false));
+        assertThat(books[1].getChecked(), is(false));
         verify(printStream, times(1)).println("Thank you for returning a book.");
-        books[1].checked = false;
     }
 
     @Test
-    public void shouldNotifyUserIfTheyTryToReturnAnInvalidBook() throws IOException {
+    public void shouldNotifyUserIfTheyTryToReturnAnInvalidBook() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
+
         when(bufferedReader.readLine()).thenReturn("7");
 
         biblioteca.returnBook();
@@ -132,15 +137,16 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void shouldCheckoutAMovie() throws IOException, InvalidMovieException {
+    public void shouldCheckoutAMovie() throws IOException, InvalidMovieException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
+
         when(bufferedReader.readLine()).thenReturn("2");
 
         biblioteca.checkoutMovie();
 
-        assertThat(movies[1].checked, is(true));
+        assertThat(movies[1].getChecked(), is(true));
         verify(printStream, times(1)).println("Thank you! Enjoy the movie.");
-
-        movies[1].checked = false;
     }
 
     @Test
@@ -180,6 +186,20 @@ public class BibliotecaTest {
         biblioteca.showUserInformation();
 
         verify(printStream, times(1)).println("Name: " + users[0].getName());
+    }
+
+    @Test
+    public void shouldReturAMovie() throws IOException, InvalidUserException {
+        when(bufferedReader.readLine()).thenReturn("111-1111").thenReturn("123456");
+        biblioteca.login();
+
+        movies[1].checkout(users[0]);
+
+        when(bufferedReader.readLine()).thenReturn("2");
+        biblioteca.returnMovie();
+
+        assertThat(books[1].getChecked(), is(false));
+        verify(printStream, times(1)).println("Thank you for returning a movie.");
     }
 
 
