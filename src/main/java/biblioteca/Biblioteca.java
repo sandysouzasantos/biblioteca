@@ -133,7 +133,7 @@ public class Biblioteca {
 
 
     public void returnBook() {
-        printStream.println("Which book would you like to return?");
+        printStream.println("Which book would you like to return (1, 2, ...)?");
 
         Book book;
         try {
@@ -261,7 +261,7 @@ public class Biblioteca {
     }
 
     public void returnMovie() {
-        printStream.println("Which movie would you like to return?");
+        printStream.println("Which movie would you like to return (1, 2, ...)?");
 
         Movie movie;
         try {
